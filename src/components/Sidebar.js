@@ -11,6 +11,7 @@ import {
   Shield,
   LogOut,
 } from 'lucide-react';
+import { supabase } from '../supabaseClient'; // 🔁 adjust path if needed
 
 const Sidebar = ({ activeSection }) => {
   const navigate = useNavigate();
@@ -32,6 +33,13 @@ const Sidebar = ({ activeSection }) => {
     { id: 'privacy', label: 'Privacy policy', icon: Shield },
     { id: 'logout', label: 'Logout', icon: LogOut },
   ];
+
+  const handleFooterClick = async (id) => {
+    if (id === 'logout') {
+      await supabase.auth.signOut();
+      navigate('/login');
+    }
+  };
 
   return (
     <div style={styles.sidebar}>
@@ -62,7 +70,11 @@ const Sidebar = ({ activeSection }) => {
 
       <div style={styles.footerBox}>
         {footerItems.map(({ id, label, icon: Icon }) => (
-          <button key={id} style={styles.footerItem}>
+          <button
+            key={id}
+            style={styles.footerItem}
+            onClick={() => handleFooterClick(id)}
+          >
             <Icon size={18} style={styles.icon} />
             <span>{label}</span>
           </button>

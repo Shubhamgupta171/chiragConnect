@@ -8,9 +8,11 @@ const Registration = () => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [serverOtp, setServerOtp] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const fullPhone = `+91${mobileNumber}`;
 
   const handleDetailsSubmit = async (e) => {
     e.preventDefault();
@@ -20,56 +22,74 @@ const Registration = () => {
     if (!email.trim() || !email.includes('@')) return setError('Enter a valid email');
     if (!/^[6-9]\d{9}$/.test(mobileNumber)) return setError('Enter a valid 10-digit mobile number');
 
-    const { data: existingUser, error: fetchError } = await supabase
-      .from('users')
-      .select('*')
-      .or(`mobile.eq.${mobileNumber},email.eq.${email}`);
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
 
-    if (fetchError) return setError('Failed to validate user');
-    if (existingUser.length > 0) return setError('User already exists with this mobile or email');
+      if (error) throw error;
 
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert([{ name, email, mobile: mobileNumber }]);
-
-    if (insertError) {
-      setError('Failed to register: ' + insertError.message);
-      return;
+      console.log('OTP Sent:', data);
+      setStep('otp');
+    } catch (err) {
+      console.error('OTP send error:', err);
+      setError('Failed to send OTP: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    // ✅ Mock OTP generation
-    const generatedOtp = '123456'; 
-    setServerOtp(generatedOtp);
-    setOtp(generatedOtp);
-    alert(`Your OTP is ${generatedOtp}`); 
-
-    setStep('otp');
   };
 
-  const handleOtpSubmit = (e) => {
+  const handleOtpSubmit = async (e) => {
     e.preventDefault();
-    if (!/^\d{6}$/.test(otp)) return setError('Enter a valid 6-digit OTP');
-    if (otp !== serverOtp) return setError('Incorrect OTP');
-
     setError('');
-navigate('/success?type=signup');
+
+    if (!/^\d{6}$/.test(otp)) return setError('Enter a valid 6-digit OTP');
+
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.auth.verifyOtp({
+        phone: fullPhone,
+        token: otp,
+        type: 'sms',
+      });
+
+      if (error) throw error;
+
+      console.log('OTP Verified:', data);
+
+      // Save additional user info to your DB
+      await supabase.from('users').upsert({
+        id: data.user.id,
+        name,
+        email,
+        phone: fullPhone,
+      });
+
+      navigate('/success?type=signup');
+    } catch (err) {
+      console.error('OTP verification error:', err);
+      setError('OTP verification failed: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const resendOtp = () => {
-    const newOtp = '123456'; // You can randomize later
-    setServerOtp(newOtp);
-    setOtp(newOtp);
-    alert(`OTP has been resent: ${newOtp}`);
+  const resendOtp = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
+      if (error) throw error;
+      alert('OTP resent successfully');
+    } catch (err) {
+      setError('Failed to resend OTP: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div style={styles.page}>
       <div style={styles.leftSection}>
-        <img
-          src="/36c9856f8346fa1d7fbc201ba4f6c6108bce5849.png"
-          alt="Registration Illustration"
-          style={styles.image}
-        />
+        <img src="/36c9856f8346fa1d7fbc201ba4f6c6108bce5849.png" alt="Illustration" style={styles.image} />
       </div>
 
       <div style={styles.rightSection}>
@@ -85,7 +105,7 @@ navigate('/success?type=signup');
                   type="tel"
                   value={mobileNumber}
                   onChange={(e) => setMobileNumber(e.target.value)}
-                  placeholder="+91837283XXXX"
+                  placeholder="837283XXXX"
                   style={styles.input}
                 />
 
@@ -110,7 +130,7 @@ navigate('/success?type=signup');
             ) : (
               <>
                 <p style={styles.otpText}>
-                  OTP sent to <strong>{mobileNumber}</strong>
+                  OTP sent to <strong>{fullPhone}</strong>
                 </p>
                 <label style={styles.label}>Enter OTP</label>
                 <input
@@ -126,8 +146,8 @@ navigate('/success?type=signup');
 
             {error && <p style={styles.error}>{error}</p>}
 
-            <button type="submit" style={styles.button}>
-              {step === 'details' ? 'Get OTP' : 'Verify OTP'}
+            <button type="submit" style={styles.button} disabled={loading}>
+              {loading ? 'Please wait...' : step === 'details' ? 'Get OTP' : 'Verify OTP'}
             </button>
 
             {step === 'otp' && (
@@ -155,7 +175,9 @@ navigate('/success?type=signup');
   );
 };
 
-const styles = {
+// Reuse your existing styles (unchanged)
+const styles = { 
+
   page: {
     display: 'flex',
     height: '100vh',
@@ -280,5 +302,6 @@ const styles = {
     color: '#111827',
   },
 };
+
 
 export default Registration;

@@ -1,34 +1,59 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient'; // Adjust the import path as needed
 
 const Registration = () => {
   const [step, setStep] = useState('details');
- 
   const [mobileNumber, setMobileNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleDetailsSubmit = (e) => {
+  const handleDetailsSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!/^[6-9]\d{9}$/.test(mobileNumber)) {
       setError('Enter a valid 10-digit mobile number');
       return;
     }
+
     setError('');
+    const fullNumber = '+91' + mobileNumber;
+
+    const { error: sendError } = await supabase.auth.signInWithOtp({
+      phone: fullNumber,
+    });
+
+    if (sendError) {
+      setError(sendError.message);
+      return;
+    }
+
     setStep('otp');
   };
 
-  const handleOtpSubmit = (e) => {
+  const handleOtpSubmit = async (e) => {
     e.preventDefault();
+
     if (!/^\d{6}$/.test(otp)) {
       setError('Enter a valid 6-digit OTP');
       return;
     }
-    setError('');
-    navigate('/success?type=login');
-   
+
+    const fullNumber = '+91' + mobileNumber;
+
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      phone: fullNumber,
+      token: otp,
+      type: 'sms',
+    });
+
+    if (verifyError) {
+      setError(verifyError.message);
+      return;
+    }
+
+    navigate('/home'); // Or your desired page
   };
 
   return (
@@ -51,15 +76,6 @@ const Registration = () => {
           <form onSubmit={step === 'details' ? handleDetailsSubmit : handleOtpSubmit}>
             {step === 'details' ? (
               <>
-                {/* <label style={styles.label}>Full Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your Name"
-                  style={styles.input}
-                /> */}
-
                 <label style={styles.label}>Mobile Number</label>
                 <input
                   type="tel"
@@ -99,7 +115,11 @@ const Registration = () => {
                 </button>
                 <p style={styles.resend}>
                   Didn’t receive OTP?{' '}
-                  <button type="button" style={styles.resendLink} onClick={() => alert('OTP resent')}>
+                  <button
+                    type="button"
+                    style={styles.resendLink}
+                    onClick={handleDetailsSubmit}
+                  >
                     Resend
                   </button>
                 </p>
@@ -108,7 +128,7 @@ const Registration = () => {
           </form>
 
           <p style={styles.terms}>
-            By registering, you agree to our{' '}
+            By logging in, you agree to our{' '}
             <a href="/terms" style={styles.link}>Terms of Service</a> and{' '}
             <a href="/privacy" style={styles.link}>Privacy Policy</a>.
           </p>
