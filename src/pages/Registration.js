@@ -38,10 +38,10 @@ const Registration = () => {
     }
 
     // ✅ Mock OTP generation
-    const generatedOtp = '123456'; // Use static OTP for now
+    const generatedOtp = '123456'; 
     setServerOtp(generatedOtp);
     setOtp(generatedOtp);
-    alert(`Your OTP is ${generatedOtp}`); // Show it for dev only
+    alert(`Your OTP is ${generatedOtp}`); 
 
     setStep('otp');
   };
@@ -52,7 +52,7 @@ const Registration = () => {
     if (otp !== serverOtp) return setError('Incorrect OTP');
 
     setError('');
-    navigate('/home');
+navigate('/success?type=signup');
   };
 
   const resendOtp = () => {

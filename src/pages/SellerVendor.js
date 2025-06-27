@@ -105,7 +105,7 @@ export default function VendorSellerRegistration() {
                 ✅ Aadhaar authentication Successful
               </div>
 
-              <button style={buttonStyle} onClick={() => navigate("/dashboard")}>
+               <button style={buttonStyle} onClick={() => navigate("/registration-success")}>
                 Save and Proceed
               </button>
             </div>

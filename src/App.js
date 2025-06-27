@@ -6,14 +6,14 @@ import Welcome from "./pages/Welcome.js";
 import Registration from "./pages/Registration.js";
 import Login from "./pages/Login.js";
 import NotFound from "./pages/NotFound";
-import LoginFlow from "./pages/LoginFlow";
 import TypeVendor from "./pages/TypeVendor.js";
 import SellerVendor from "./pages/SellerVendor.js";
 import ServiceVendor from "./pages/ServiceVendor.js";
 import DroneServiceRegistration from "./pages/DroneServiceRegistration.js";
 import DeliveryPartner from "./pages/DeliveryPartner";
 import RegistrationSuccess from "./pages/RegistrationSuccess"; 
-import UnderReview from "./pages/UnderReview.js";  
+import UnderReview from "./pages/UnderReview.js"; 
+import SuccessPage from "./pages/SuccessPage.js";
 const queryClient = new QueryClient();
 
 function App() {
@@ -36,8 +36,8 @@ function App() {
           <Route path="/register/delivery-partner" element={<DeliveryPartner />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
           <Route path="/under-review" element={<UnderReview />} />
-          <Route path="/success" element={<LoginFlow />} />
-
+        
+<Route path="/success" element={<SuccessPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

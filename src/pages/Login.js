@@ -27,7 +27,8 @@ const Registration = () => {
       return;
     }
     setError('');
-    navigate('/home');
+    navigate('/success?type=login');
+   
   };
 
   return (
