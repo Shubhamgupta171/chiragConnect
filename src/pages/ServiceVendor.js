@@ -34,9 +34,14 @@ export default function VendorServiceRegistration() {
   const handleNextStep = () => {
     if (selectedServices.includes("Drone Spraying")) {
       navigate("/drone-service-registration");
-    } else {
+    } 
+      else if (selectedServices.includes("Tractor Services")) {
+      navigate("/tractor-service-registration");
+    } 
+    
+    else {
       // Fallback for now — could navigate to other service-specific forms
-      alert("Please select 'Drone Spraying' to continue to Drone Service Registration.");
+      alert("Please select 'Drone Spraying' or 'Tractor Service' to continue to Service Registration.");
     }
   };
 

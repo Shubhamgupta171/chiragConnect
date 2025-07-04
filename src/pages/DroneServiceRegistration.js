@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
 export default function DroneServiceRegistration() {
-  const navigate = useNavigate(); // ✅ Correct useNavigate hook
+  const navigate = useNavigate(); 
 
   const addDrone = () => {
     alert("Add more drone functionality coming soon!");

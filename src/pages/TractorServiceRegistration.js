@@ -2,8 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
-export default function DeliveryPartnerRegistration() {
-  const navigate = useNavigate();
+export default function TractorServiceRegistration() {
+  const navigate = useNavigate(); 
+
+  const addTractor = () => {
+    alert("Add more drone functionality coming soon!");
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#fff", overflow: "hidden" }}>
@@ -31,63 +35,56 @@ export default function DeliveryPartnerRegistration() {
           {/* Image Block */}
           <div style={{ width: "60%", textAlign: "center" }}>
             <img
-              src="/ab.png"
-              alt="Delivery Partner Illustration"
+              src="/sellerV.jpg"
+              alt="Drone Service"
               style={{ width: "100%", maxWidth: "520px", height: "520px", borderRadius: "1rem" }}
             />
             <p style={{ marginTop: "0.5rem", fontSize: "1.3rem", fontWeight: "600", color: "#222" }}>
-          CHIRAG Connects: Bridging Innovation and Agriculture for a Sustainable Future.
+              CHIRAG Connects: Bridging Innovation and Agriculture for a Sustainable Future.
             </p>
           </div>
 
           {/* Form Block */}
           <div style={{ width: "30%", overflowY: "auto" }}>
             <h3 style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: "600", marginBottom: "0.5rem", marginTop: "-0.2rem" }}>
-             Basics Details
+             Tractor Service Details
             </h3>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <input placeholder="Full name" required style={inputStyle} />
-              <input placeholder="Address line 1" required style={inputStyle} />
-              <input placeholder="Address line 2" style={inputStyle} />
-              <select required style={inputStyle}>
-                <option value="">State</option>
-                <option>Maharashtra</option>
-                <option>Uttar Pradesh</option>
-              </select>
-              <select required style={inputStyle}>
-                <option value="">City</option>
-                <option>Nagpur</option>
-                <option>Prayagraj</option>
-              </select>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+              <input placeholder="Tractor Driving License" style={inputStyle} required />
+              <input placeholder="Tractor Model" style={inputStyle} />
+              <input placeholder="Avg. Area covered per Hour" style={inputStyle} />
+              <input placeholder="Fuel Type" style={inputStyle} />
+              <input placeholder="Effeciency" style={inputStyle} />
+              {/* <input placeholder="" style={inputStyle} /> */}
+              <input placeholder="Year of Purchase" style={inputStyle} />
+              <input placeholder="Manufacturer Name" style={inputStyle} />
 
-              <input placeholder="Enter Driving License Number" style={inputStyle} />
-              <input placeholder="Enter Vehicle Type" style={inputStyle} />
-              <input placeholder="Enter Vehicle Number" style={inputStyle} />
-
-              <label style={{ fontSize: "0.75rem" }}>Upload License / RC Book</label>
+              <label style={{ fontSize: "0.75rem" }}>Tractor Image</label>
               <div style={{ display: "flex", gap: "0.5rem" }}>
                 <UploadBlock />
               </div>
 
-              <label style={{ fontSize: "0.75rem" }}>Upload Vehicle Images</label>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <UploadBlock />
-                <UploadBlock />
+              <input placeholder="Equipment attached" style={inputStyle} />
+              <input placeholder="Avg. Cost per Hour" style={inputStyle} />
+              <input placeholder="Insurance Info" style={inputStyle} />
+
+              <div
+                onClick={addTractor}
+                style={{
+                  fontSize: "0.75rem",
+                  color: "black",
+                  fontWeight: "500",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  marginTop: "0.6rem",
+                  marginBottom: "0.5rem"
+                }}
+              >
+                + Add more Tractor
               </div>
 
-              <label style={{ fontSize: "0.75rem" }}>Upload Aadhaar card*</label>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <UploadBlock />
-                <UploadBlock />
-              </div>
-
-              <div style={{ fontSize: "0.7rem", color: "#00A86B", fontWeight: "500" }}>
-                ✅ Aadhaar authentication Successful
-              </div>
-
-             <button style={buttonStyle} onClick={() => navigate("/registration-success")}>
-
+              <button style={buttonStyle} onClick={() => navigate("/registration-success")}>
                 Save and Proceed
               </button>
             </div>

@@ -10,6 +10,7 @@ import TypeVendor from "./pages/TypeVendor.js";
 import SellerVendor from "./pages/SellerVendor.js";
 import ServiceVendor from "./pages/ServiceVendor.js";
 import DroneServiceRegistration from "./pages/DroneServiceRegistration.js";
+import TractorServiceRegistration from "./pages/TractorServiceRegistration.js";
 import DeliveryPartner from "./pages/DeliveryPartner";
 import RegistrationSuccess from "./pages/RegistrationSuccess"; 
 import UnderReview from "./pages/UnderReview.js"; 
@@ -31,6 +32,7 @@ function App() {
            <Route path="/registration" element={<TypeVendor />} />
           <Route path="/register/service-vendor" element={<ServiceVendor />} />
           <Route path="/drone-service-registration" element={<DroneServiceRegistration />} />
+        <Route path="/tractor-service-registration" element={<TractorServiceRegistration />} />
 
           <Route path="/register/seller-vendor" element={<SellerVendor />} />
           <Route path="/register/delivery-partner" element={<DeliveryPartner />} />

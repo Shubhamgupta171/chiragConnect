@@ -87,8 +87,8 @@ const Sidebar = ({ activeSection }) => {
 const styles = {
   sidebar: {
     width: 200,
-    backgroundColor: '#000',
-    color: '#fff',
+    backgroundColor: 'black',
+    color: 'green',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -110,7 +110,7 @@ const styles = {
     width: 32,
     height: 32,
     backgroundColor: '#fff',
-    color: '#000',
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 14,
     display: 'flex',
